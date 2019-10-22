@@ -1,0 +1,33 @@
+# regex search
+import re
+import os
+import pyperclip
+
+def main():
+    t = 't'
+    print('Witaj, aktualnie pracujesz w', os.getcwd(), '\n', 'Skopiuj abs. sciezke do folderu z plikami i enter',
+          sep='')
+    input()
+    chdir_input = str(pyperclip.paste())
+    while t == 't' or 'T':
+        while not os.path.exists(chdir_input):
+            print(chdir_input, 'nie istnieje. Skopiuj sciezke ponownie i enter')
+            input()
+            chdir_input = str(pyperclip.paste())
+        reg_search = input('Podaj czego szukasz (w regexach)')
+        for file in os.listdir(chdir_input):
+            if file.endswith('.txt'):
+                print(os.path.join(chdir_input, file))
+                correct_file = open(os.path.join(chdir_input, file), 'r+')
+                msg = correct_file.read()
+                looking_for(reg_search, msg)
+        t = input('Jezeli szukasz czegos jeszcze, wcisnij t')
+
+
+def looking_for(regex, dir_msg):
+    search_regex = re.compile(regex, re.I)
+    result = search_regex.findall(dir_msg)
+    print(result)
+
+
+main()
